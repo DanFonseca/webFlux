@@ -1,6 +1,7 @@
 package com.react.learning.reactLearning.repository
 
 import com.react.learning.reactLearning.document.Item
+import junit.framework.Assert.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
@@ -39,7 +40,7 @@ class ItemReactiveRepositoryTest {
             itemReactiveRepository.findAll()
         )
             .expectSubscription()
-            .expectNextCount(3)
+            .expectNextCount(4)
             .verifyComplete()
     }
 
@@ -107,5 +108,37 @@ class ItemReactiveRepositoryTest {
                         it.price == newPrice
                     }
             }
+    }
+
+    @Test
+    fun `Must Delete By Id` () {
+        val deletedItem = itemReactiveRepository
+                .deleteById("APPLE#1").log()
+
+        StepVerifier.create(deletedItem)
+                .expectSubscription()
+                .verifyComplete()
+
+        StepVerifier
+                .create(itemReactiveRepository.findById("APPLE#1"))
+                .expectSubscription()
+                .expectNextCount(0)
+                .verifyComplete()
+    }
+
+    @Test
+    fun `Must Delete By Description` () {
+        val deletedItem = itemReactiveRepository
+                .deleteByDescription("iPhone 11").log()
+
+        StepVerifier.create(deletedItem)
+                .expectSubscription()
+                .verifyComplete()
+
+        StepVerifier
+                .create(itemReactiveRepository.findByDescription("iPhone 11"))
+                .expectSubscription()
+                .expectNextCount(1)
+                .verifyComplete()
     }
 }
