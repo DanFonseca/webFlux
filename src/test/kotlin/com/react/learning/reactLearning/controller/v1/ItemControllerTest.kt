@@ -51,7 +51,7 @@ class ItemControllerTest {
             .exchange()
             .expectStatus().isOk
             .expectBodyList(Item::class.java)
-            .hasSize(4)
+            .hasSize(5)
     }
 
     @Test
@@ -62,7 +62,7 @@ class ItemControllerTest {
             .exchange()
             .expectStatus().isOk
             .expectBodyList(Item::class.java)
-            .hasSize(4)
+            .hasSize(5)
             .consumeWith<WebTestClient.ListBodySpec<Item>> { it ->
                 it.responseBody?.forEach {
                     assertTrue(it.id != null)
@@ -73,12 +73,12 @@ class ItemControllerTest {
     @Test
     fun `Get Item By Id with Path Variable`() {
         webTestClient.get()
-            .uri("$ITEM_V1_END_POINT/{id}", "APPLE#1")
+            .uri("$ITEM_V1_END_POINT/{id}", "1")
             .accept(APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk
             .expectBody()
-            .jsonPath("$.price", 150.00)
+            .jsonPath("$.price", 299.99)
     }
 
     @Test
