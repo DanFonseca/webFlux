@@ -1,5 +1,6 @@
 package com.react.learning.reactLearning.repository
 
+import com.react.learning.reactLearning.common.ItemBuilder
 import com.react.learning.reactLearning.document.Item
 import junit.framework.Assert.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -8,29 +9,25 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import reactor.core.publisher.Flux
 import reactor.test.StepVerifier
 
 @DataMongoTest
 @RunWith(SpringRunner::class)
+@ActiveProfiles(profiles = ["dev"])
 @DirtiesContext
 class ItemReactiveRepositoryTest {
 
     @Autowired
     lateinit var itemReactiveRepository: ItemReactiveRepository
 
-    private val itemList = arrayListOf(
-        Item(null, "Apple Watch", 149.99),
-        Item(null, "iPhone 11", 649.99),
-        Item(null, "Apple TV", 299.99),
-        Item("APPLE#1", "iPod", 150.00)
-    )
 
     @BeforeEach
     fun setUp() {
         itemReactiveRepository.deleteAll()
-            .thenMany(Flux.fromIterable(itemList))
+            .thenMany(Flux.fromIterable(ItemBuilder.itemsBuilder()))
             .flatMap { item -> itemReactiveRepository.save(item) }
             .doOnNext { item -> println("Item: $item - Saved") }
             .blockLast()
@@ -53,7 +50,7 @@ class ItemReactiveRepositoryTest {
         )
             .expectSubscription()
             .expectNextMatches {
-                it.description == itemList[3].description
+                it.description == ItemBuilder.itemsBuilder()[3].description
             }
             .verifyComplete()
     }
@@ -66,7 +63,7 @@ class ItemReactiveRepositoryTest {
         )
             .expectSubscription()
             .expectNextMatches {
-                it.description == itemList[0].description
+                it.description == ItemBuilder.itemsBuilder()[0].description
             }
             .verifyComplete()
     }

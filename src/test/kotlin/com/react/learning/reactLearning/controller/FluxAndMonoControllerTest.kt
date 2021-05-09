@@ -1,6 +1,6 @@
 package com.react.learning.reactLearning.controller
 
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,11 +11,10 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.test.StepVerifier
 
-@WebFluxTest
+@WebFluxTest (FluxAndMonoController::class)
 @RunWith(SpringRunner::class)
 @DirtiesContext
-class FluxAndMonoControllerTest
-    () {
+class FluxAndMonoControllerTest {
 
     @Autowired
     lateinit var webClientTest: WebTestClient
@@ -40,7 +39,7 @@ class FluxAndMonoControllerTest
     @Test
     fun webFluxApproach2() {
 
-        val result = webClientTest.get()
+         webClientTest.get()
             .uri("/flux")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
