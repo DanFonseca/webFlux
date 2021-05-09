@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 data class Item(
     @Id
     val id: String? = null,
-    val description: String,
-    var price: Double
+    val description: String? = null,
+    var price: Double? = null
 ) {
 }
