@@ -19,7 +19,7 @@ class ItemRouter {
                 POST("$ITEM_V1_FUNCTIONAL_END_POINT", itemHandler::createAnItem)
                 DELETE("$ITEM_V1_FUNCTIONAL_END_POINT/{id}", itemHandler::deleteById)
                 PUT("$ITEM_V1_FUNCTIONAL_END_POINT/{id}", itemHandler::updateItem)
-
             }
     }
+
 }
